@@ -64,6 +64,13 @@ class OurMetabox {
 	public function render_metabox( $post ) {
 		$location_meta = get_post_meta( $post->ID, 'location', true );
 		$city          = get_post_meta( $post->ID, 'city', true );
+		$is_favorite   = get_post_meta( $post->ID, 'is_favorite', true );
+		$checked       = $is_favorite ? 'checked' : '';
+
+		echo '<pre>';
+		print_r( $is_favorite );
+		echo '</pre>';
+
 		wp_nonce_field( 'location', 'location_nonce' );
 		?>
 		<label for="location"><?php _e( 'Post location', 'our-metabox' ); ?></label>
@@ -73,6 +80,10 @@ class OurMetabox {
 
 		<label for="location"><?php _e( 'City', 'our-metabox' ); ?></label>
 		<input type="text" name="city" id="city" value="<?php echo esc_attr( $city ); ?>" class="regular-text">
+
+		<label for="is_favorite"> <?php _e( 'Is favorite post', 'our-metabox' ); ?></label>
+		<input type="checkbox" name="is_favorite" id="is_favorite" value="1" <?php echo esc_attr( $checked ); ?>>
+
 		<?php
 	}
 
@@ -88,6 +99,18 @@ class OurMetabox {
 		if ( isset( $_POST['city'] ) ) {
 			update_post_meta( $post_id, 'city', sanitize_text_field( $_POST['city'] ) );
 		}
+
+		$is_fav = 0;
+		if ( isset( $_POST['is_favorite'] ) && ! empty( $_POST['is_favorite'] ) ) {
+			$is_fav = 1;
+			update_post_meta( $post_id, 'is_favorite', $is_fav );
+		}
+
+		// Save checkbox data
+		if ( ! isset( $_POST['is_favorite'] ) ) {
+			update_post_meta( $post_id, 'is_favorite', 0 );
+		}
+
 	}
 }
 
