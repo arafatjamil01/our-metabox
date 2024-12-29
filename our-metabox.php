@@ -22,10 +22,12 @@ class OurMetabox {
 	}
 
 	function om_admin_scripts( $hook_suffix ) {
+		$version = time();
+
 		if ( 'post.php' === $hook_suffix ) {
-			wp_enqueue_media();
-			wp_enqueue_script( 'our-metabox', plugin_dir_url( __FILE__ ) . 'assets/js/our-metabox.js', array( 'jquery' ), time(), true );
-			wp_enqueue_style( 'our-metabox', plugin_dir_url( __FILE__ ) . 'assets/css/admin.css', array( 'jquery' ), time(), true );
+			wp_enqueue_media(); // Enqueue media library, recommended, might work even without enqueueing.
+			wp_enqueue_script( 'our-metabox', plugin_dir_url( __FILE__ ) . 'assets/admin/js/our-metabox.js', array( 'jquery' ), $version, true );
+			wp_enqueue_style( 'our-metabox', plugin_dir_url( __FILE__ ) . 'assets/admin/css/admin.css', array(), $version );
 		}
 	}
 
@@ -135,8 +137,10 @@ class OurMetabox {
 			<br>
 			<br>
 			<!-- Image box -->
-			<label for="image"><?php _e( 'Image', 'our-metabox' ); ?></label>
-			<button class="button" id="upload_image">Upload Image</button>
+			<div class="custom-image-box">
+				<label for="image"><?php _e( 'Image', 'our-metabox' ); ?></label>
+				<button class="button" id="upload_image">Upload Image</button>
+			</div>
 		<?php
 	}
 
