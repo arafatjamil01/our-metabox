@@ -140,6 +140,15 @@ class OurMetabox {
 			<div class="custom-image-box">
 				<label for="image"><?php _e( 'Image', 'our-metabox' ); ?></label>
 				<button class="button" id="upload_image">Upload Image</button>
+				<input type="hidden" name="omb_image_id" id="omb_image_id" value="<?php echo get_post_meta( $post->ID, 'omb_image_id', true ); ?>">
+				<input type="hidden" name="omb_image_url" id="omb_image_url" value="<?php echo get_post_meta( $post->ID, 'omb_image_url', true ); ?>">
+				<div id="image_container">
+					<?php
+					$image_id = get_post_meta( $post->ID, 'omb_image_id', true );
+					if ( $image_id ) {
+						echo wp_get_attachment_image( $image_id, 'thumbnail' ); // this can also be done saving the url and rendering it here. 
+					}
+					?>
 			</div>
 		<?php
 	}
@@ -179,6 +188,11 @@ class OurMetabox {
 		// Save radio data
 		$another_colors = isset( $_POST['another_colors'] ) ? sanitize_text_field( $_POST['another_colors'] ) : '';
 		update_post_meta( $post_id, 'another_colors', $another_colors );
+
+		// Save image data
+		if ( isset( $_POST['omb_image_id'] ) ) {
+			update_post_meta( $post_id, 'omb_image_id', sanitize_text_field( $_POST['omb_image_id'] ) );
+		}
 	}
 }
 
